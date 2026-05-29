@@ -4,25 +4,65 @@ Building blocks for multi-agent workflows in [pi](https://pi.dev).
 
 ## Blocks
 
-### 01-critic — Iterative Review Loop
+| # | Block | Pattern | What It Does |
+|---|-------|---------|--------------|
+| 01 | [critic](./01-critic/) | **Reflection** | Generate → critic reviews → revise loop |
+| 02 | [debater](./02-debater/) | **Debate** | Two agents argue positions, judge decides winner |
+| 03 | [round-robin](./03-round-robin/) | **Sequential** | Agents take turns building on shared context |
+| 04 | [router](./04-router/) | **Routing** | LLM classifies task → dispatches to best agent |
+| 05 | [planner](./05-planner/) | **Plan & Execute** | Create plan → execute steps with retry |
+| 06 | [handoff](./06-handoff/) | **Explicit Handoff** | Agent delegates to specific named agent |
+| 07 | [swarm](./07-swarm/) | **Parallel** | Run N agents concurrently, merge results |
 
-A self-improving loop powered by a second pi instance acting as a quality critic.
-
-- `/critic` command sends the last assistant message to a sub-pi configured as a reviewer
-- If the critic says **approved**, the loop stops
-- If not, feedback is injected as a user message so the main LLM revises — up to 8 iterations
-- Sub-pi runs on `claude-3.5-haiku` with thinking disabled for speed
+## Running
 
 ```bash
-just run-critic
+just run-01   # critic
+just run-02   # debater
+just run-03   # round-robin
+just run-04   # router
+just run-05   # planner
+just run-06   # handoff
+just run-07   # swarm
 ```
+
+Or directly: `pi -ne -e ./NN-blockname/index.ts`
 
 ## Structure
 
 ```
-01-critic/
-├── index.ts           # Extension (registers /critic, pre-fills editor)
-├── readme.md          # Block-specific docs
-└── critic-system/     # Sub-pi workspace
-    └── SYSTEM.md      # System prompt for the critic sub-pi
+01-critic/                    # Reflection: generate → review → revise
+├── index.ts
+├── readme.md
+└── critic-system/SYSTEM.md
+
+02-debater/                   # Debate: affirmative vs negative + judge
+├── index.ts
+├── readme.md
+├── affirmative-system/SYSTEM.md
+├── negative-system/SYSTEM.md
+└── judge-system/SYSTEM.md
+
+03-round-robin/               # Sequential: agents take turns
+├── index.ts
+└── readme.md
+
+04-router/                    # Routing: classify → dispatch → evaluate
+├── index.ts
+└── readme.md
+
+05-planner/                   # Plan & Execute: plan → execute → retry
+├── index.ts
+└── readme.md
+
+06-handoff/                   # Handoff: explicit agent delegation
+├── index.ts
+└── readme.md
+
+07-swarm/                     # Parallel: concurrent agents → merge results
+├── index.ts
+└── readme.md
+
+justfile
+README.md
 ```
