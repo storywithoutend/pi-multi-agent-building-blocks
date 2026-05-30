@@ -1,0 +1,5 @@
+{
+  "defaultModel": "openrouter/anthropic/claude-3.5-haiku",
+  "defaultThinkingLevel": "off",
+  "tools": []
+}
