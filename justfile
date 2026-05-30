@@ -46,3 +46,13 @@ run-swarm: run-07
 
 # ── All ──
 run-all: run-01 run-02 run-03 run-04 run-05 run-06 run-07
+
+# ── Tests ──
+test:
+	npx vitest --run
+
+test-watch:
+	npx vitest
+
+test-01:
+	npx vitest --run tests/01-critic.test.ts
